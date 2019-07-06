@@ -25,6 +25,9 @@ Page({
       })
     } else {
       var serverUrl = app.serverUrl;
+      wx.showLoading({
+        title: '努力加载ing...',
+      })
       wx.request({
         url: serverUrl + '/users/login',
         method: "POST",
@@ -36,15 +39,18 @@ Page({
           'content-type': 'application/x-www-form-urlencoded'
         },
         success: function (res) {
-          console.log(res.data);
+          wx.hideLoading();
+          console.log(res.data); 
           var status = res.data.status;
           if (status == 0) {
+            //登录成功
             wx.showToast({
               title: res.data.msg,
-              icon: "none",
+              icon: "success",
               duration: 2000
             }),
-              app.userInfo = res.data.data;
+            //跳转界面
+            app.userInfo = res.data.data;
           } else if (status == 1) {
             wx.showToast({
               title: res.data.msg,
@@ -56,8 +62,8 @@ Page({
       })
     }
   },
-  goRegistPage(){
-    wx.redirectTo({
+  goRegistPage:function(){
+    wx.navigateTo({
       url: '../userRegist/regist',
     })
   }

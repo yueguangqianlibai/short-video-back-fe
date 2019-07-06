@@ -21,7 +21,7 @@
         <button class='regist' type='primary' form-type='submit'>登录</button>
       </view>
       <view>
-        <button class='goLoginBtn' type='warn' bindtap='goRegistPage'>立即注册</button>
+        <button class='goLoginBtn' type='warn' bindtap='goRegistPage'>没有账号？点击注册</button>
       </view>
     </form>
   </view>
