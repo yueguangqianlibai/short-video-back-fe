@@ -50,6 +50,9 @@ Page({
               duration: 2000
             }),
             //跳转界面
+              wx.navigateTo({
+                url: '../mine/mine',
+              })
             app.userInfo = res.data.data;
           } else if (status == 1) {
             wx.showToast({
