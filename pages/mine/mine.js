@@ -7,8 +7,41 @@ Page({
     isMe: true,
     faceUrl: "../resource/images/noneface.png",
   },
-
-  onLoad: function (params) {
+  
+  onLoad: function () {
+    var me = this;
+    var user = app.userInfo;
+    wx.showLoading({
+      title: '努力加载ing...',
+    })
+    wx.request({
+      url: app.serverUrl + '/userService/queryInfo',
+      method: 'POST',
+      data: {
+        userId: user.id
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        wx.hideLoading();
+        console.log(res.data);
+        if(res.data.status == 0){
+          var userInfo =  res.data.data
+          var faceUrl = "../resource/images/noneface.png";
+          if (userInfo.faceImage != null && userInfo.faceImage != "" && userInfo.faceImage != undefined){
+            faceUrl = app.serverUrl + userInfo.faceImage;
+          }   
+          me.setData({
+            faceUrl: faceUrl,
+            fansCounts: userInfo.fansCounts,
+            followCounts: userInfo.followCounts,
+            receiveLikeCounts: userInfo.receiveLikeCounts,
+            nickname: userInfo.nickname
+          });
+        }
+      }
+    })
 
   },
   logout: function (){
@@ -98,5 +131,42 @@ Page({
         })
       }
     })
+  }, 
+  uploadVideo: function(){
+    var me = this;
+    wx.chooseVideo({
+      sourceType: ['ablum'],
+      success: function(res){
+        console.log(res);
+        var duration = res.duration;
+        var tempheight = res.height;
+        var tempwidth = res.width;
+        var tempVideoUrl = res.tempFilePath;
+        var tempCoverUrl = res.thumbTempFilePath;
+
+        if (duration > 11){
+          wx.showToast({
+            title: '视频长度不可超过10秒~~',
+            icon: 'none',
+            duration:3000   
+          })
+        }else if(duration < 3){
+          wx.showToast({
+            title: '视频长度不可小于3秒~~',
+            icon: 'none',
+            duration: 3000
+          })
+        }else{
+          wx.navigateTo({
+            url: '../chooseBgm/chooseBgm?duration=' + duration
+              + "&tempheight=" + tempheight
+              + "&tempwidth=" + tempwidth
+              + "&tempVideoUrl=" + tempVideoUrl
+              + "&tempCoverUrl=" + tempCoverUrl
+          })
+        }   
+      }
+    })
+
   }
 })
