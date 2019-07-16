@@ -43,14 +43,13 @@ Page({
     var bgmId = e.detail.value.bgmId;
     var desc = e.detail.value.desc;
 
-    console.log("bgmId:" + bgmId);
-    console.log("视频描述：" + desc);
-
     var duration = me.data.videoParams.duration;
     var tempheight = me.data.videoParams.tempheight;
     var tempwidth = me.data.videoParams.tempwidth;
     var tempVideoUrl = me.data.videoParams.tempVideoUrl;
     var tempCoverUrl = me.data.videoParams.tempCoverUrl;
+    console.log("描述:"+desc);
+    console.log("封面:" + tempCoverUrl);
 
     //上传短视频
     wx.showLoading({
@@ -73,13 +72,49 @@ Page({
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function (res) {
-        // var data = JSON.parse(res.data);
-        console.log(res);
-        wx.hideLoading();
+        var data = JSON.parse(res.data);
         if (data.status == 0) {
+
+
+          var videoId = data.data.id;
+          wx.showLoading({
+            title: '努力上传中...',
+          })
+          wx.uploadFile({
+            url: serverUrl + '/video/uploadCover',
+            formData: {
+              userId: app.userInfo.id,
+              videoId: videoId
+            },
+            filePath: tempCoverUrl,
+            name: 'file',
+            header: {
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            success: function (res) {
+              var data = JSON.parse(res.data);
+              if (data.status == 0) {
+                console.log(res);
+                wx.hideLoading();
+                wx.showToast({
+                  title: '上传成功~',
+                  icon: 'success',
+                  duration: 3000
+                });
+                wx.navigateBack({
+                  delea:1,
+                })
+              } else {
+                wx.showToast({
+                  title: '上传失败了~',
+                  duration: 3000
+                });
+              }
+            }
+          })
+        }else{
           wx.showToast({
-            title: '上传成功~',
-            icon: 'success',
+            title: '上传失败了~',
             duration: 3000
           });
         } 

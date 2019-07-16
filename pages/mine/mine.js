@@ -133,9 +133,10 @@ Page({
     })
   }, 
   uploadVideo: function(){
+    console.log("xxxxxxx");
     var me = this;
     wx.chooseVideo({
-      sourceType: ['ablum'],
+      sourceType: ['album','camera'],
       success: function(res){
         console.log(res);
         var duration = res.duration;

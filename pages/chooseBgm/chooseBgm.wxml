@@ -5,21 +5,9 @@
 
       <block wx:for="{{bgmList}}">
       <audio name="{{item.name}}" author="{{item.author}}" src="{{serverUrl}}{{item.path}}" style='width:300px' id="myAudio" controls loop></audio>
-      <radio style='margin-top:20px;' value='{{item.id}}'></radio>
+      <radio style='margin-top:10px;' value='{{item.id}}'></radio>
       </block>
-
-      
-     
-
       </radio-group>
-      
-
-
-
-      <!-- <button type="primary" bindtap="audioPlay">播放</button>
-      <button type="primary" bindtap="audioPause">暂停</button>
-      <button type="primary" bindtap="audio14">设置当前播放时间为14秒</button>
-      <button type="primary" bindtap="audioStart">回到开头</button> -->
 
         <view class="inputView">
             <label class="loginLabel">视频描述：</label>
