@@ -133,7 +133,6 @@ Page({
     })
   }, 
   uploadVideo: function(){
-    console.log("xxxxxxx");
     var me = this;
     wx.chooseVideo({
       sourceType: ['album','camera'],
