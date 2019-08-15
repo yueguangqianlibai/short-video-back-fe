@@ -5,9 +5,20 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    
   },
-  doLogin:function(e){
+  onLoad: function(params) {
+    var me = this;
+    var redirectUrl = params.redirectUrl;
+    if (redirectUrl != null && redirectUrl != undefined && redirectUrl != '') {
+      redirectUrl = redirectUrl.replace(/#/g, "?");
+      redirectUrl = redirectUrl.replace(/@/g, "=");
+
+      me.redirectUrl = redirectUrl;
+    }
+  },
+  doLogin: function(e) {
+    var me = this;
     var formObject = e.detail.value;
     var username = formObject.username;
     var password = formObject.password;
@@ -38,22 +49,31 @@ Page({
         header: {
           'content-type': 'application/x-www-form-urlencoded'
         },
-        success: function (res) {
+        success: function(res) {
           wx.hideLoading();
-          console.log(res.data); 
+          console.log(res.data);
           var status = res.data.status;
           if (status == 0) {
             //登录成功
             wx.showToast({
-              title: res.data.msg,
-              icon: "success",
-              duration: 2000
-            }),
-            //跳转界面
+                title: res.data.msg,
+                icon: "success",
+                duration: 2000
+              }),
+              //app.userInfo = res.data.data;
+              //fix me 修改原有的的全局对象为本地缓存
+              app.setGlobalUserInfo(res.data.data);
+            var redirectUrl = me.redirectUrl;
+            if (redirectUrl != null && redirectUrl != "" && redirectUrl != undefined) {
+              wx.navigateTo({
+                url: redirectUrl,
+              })
+            } else {
+              //跳转界面
               wx.navigateTo({
                 url: '../mine/mine',
               })
-            app.userInfo = res.data.data;
+            }
           } else if (status == 1) {
             wx.showToast({
               title: res.data.msg,
@@ -65,7 +85,7 @@ Page({
       })
     }
   },
-  goRegistPage:function(){
+  goRegistPage: function() {
     wx.navigateTo({
       url: '../userRegist/regist',
     })

@@ -1,0 +1,32 @@
+<view>
+  <form bindsubmit='upload'>
+
+    <view class="audio-wapper">
+      <image src="../resource/images/play.png" class="ico"></image>
+      <view class="words">
+        <view class="song-name">体面</view>
+        <view class="singer">于文文</view>
+      </view>
+       <view class="duration">04:30</view>
+    </view>
+    <view class="audio-wapper">
+      <image src="../resource/images/play.png" class="ico"></image>
+      <view class="words">
+        <view class="song-name">体面</view>
+        <view class="singer">于文文</view>
+      </view>
+       <view class="duration">04:30</view>
+    </view>
+
+
+    <view class="inputView">
+      <label class="loginLabel">视频描述：</label>
+      <input name="desc" class="inputText" placeholder="说点什么吧" />
+    </view>
+
+    <!-- 提交 -->
+    <button class="submitBtn" type="primary" form-type='submit'>上传视频</button>
+
+    <button class="gobackBtn" type="warn" form-type='reset'>重置</button>
+  </form>
+</view>

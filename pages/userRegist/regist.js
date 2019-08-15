@@ -50,7 +50,12 @@ Page({
               icon: "success",
               duration: 2000
               }),
-              app.userInfo = res.data.data;
+              //app.userInfo = res.data.data;
+              //fix me 修改原有的的全局对象为本地缓存
+              app.setGlobalUserInfo(res.data.data);
+              wx.navigateTo({
+                url: '../mine/mine',
+              })
           }else if(status == 1){
             wx.showToast({
               title: res.data.msg,

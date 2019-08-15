@@ -17,11 +17,14 @@ Page({
         title: '努力加载ing...'
       })
       var serverUrl = app.serverUrl;
+      var userInfo = app.getGlobalUserInfo();
       wx.request({
         url: serverUrl + '/bgm/list',
         method: 'POST',
         header: {
-          'content-type': 'application/x-www-form-urlencoded'
+          'content-type': 'application/x-www-form-urlencoded',
+          'userId': userInfo.id,
+          'userToken': userInfo.userToken
         },
         success:function(res){
           console.log(res.data);
@@ -54,10 +57,11 @@ Page({
       title: '努力上传中...',
     })
     var serverUrl = app.serverUrl;
+    var userInfo = app.getGlobalUserInfo();
     wx.uploadFile({
       url: serverUrl + '/video/uploadVideo',
       formData: {
-        userId: app.userInfo.id,
+        userId: userInfo.id, //fixme 原来的 app.userInfo.id
         bgmId: bgmId,
         desc: desc,
         videoSeconds: duration,
@@ -67,7 +71,9 @@ Page({
       filePath: tempVideoUrl,
       name: 'file',
       header: {
-        'content-type': 'application/x-www-form-urlencoded'
+        'content-type': 'application/x-www-form-urlencoded',
+        'userId': userInfo.id,
+        'userToken': userInfo.userToken
       },
       success: function (res) {
         var data = JSON.parse(res.data);

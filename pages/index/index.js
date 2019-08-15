@@ -2,45 +2,63 @@ const app = getApp()
 
 Page({
   data: {
-    totalPage : 1,
-    pageNum : 1,
+    totalPage: 1,
+    pageNum: 1,
     videoList: [],
 
-    screenWidth:350,
-    serverUrl: ""
+    screenWidth: 350,
+    serverUrl: "",
+    searchContent: ""
   },
 
-  onLoad: function () {
+  onLoad: function(params) {
     var me = this;
     var screenWidth = wx.getSystemInfoSync().screenWidth;
     me.setData({
       screenWidth: screenWidth,
     });
+    if (params.search == undefined) {
+      params.search = '';
+    }
+    var searchContent = params.search;
+    var isSaveRecord = params.isSaveRecord;
+    if (isSaveRecord == null || isSaveRecord == '' || isSaveRecord == undefined) {
+      isSaveRecord = 0;
+    }
+
+    me.setData({
+      searchContent: searchContent
+    });
 
     //获取当前的分页数
     var page = me.data.pageNum;
-    me.getAllVideoList(page);
+    me.getAllVideoList(page, isSaveRecord);
   },
-  getAllVideoList:function(page){
+  getAllVideoList: function(page, isSaveRecord) {
     var me = this;
     var serverUrl = app.serverUrl;
     wx.showLoading({
       title: '努力加载中...',
     })
+    if (searchContent == null || searchContent == '' || searchContent == 'undefined') {
+      searchContent: '';
+    }
 
+    var searchContent = me.data.searchContent;
     wx.request({
       url: serverUrl + "/video/showAllVideo",
       method: "POST",
       data: {
-        pageNum: page
+        pageNum: page,
+        isSaveRecord: isSaveRecord,
+        videoDesc: searchContent
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
-      success: function (res) {
+      success: function(res) {
         wx.hideLoading();
         wx.hideNavigationBarLoading();
-        console.log(res.data);
         if (page == 1) {
           me.setData({
             videoList: []
@@ -59,16 +77,16 @@ Page({
       }
     })
   },
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     wx.showNavigationBarLoading();
-    this.getAllVideoList(1);
+    this.getAllVideoList(1, 0);
   },
-  onReachBottom:function(){
+  onReachBottom: function() {
     var me = this;
     var currentPage = me.data.pageNum;
     var totalPage = me.data.totalPage;
-    //判断当前页数和总页数是否相等，如果相等就没有比要查询
-    if(currentPage === totalPage){
+    //判断当前页数和总页数是否相等，如果是查询
+    if (currentPage === totalPage) {
       wx.showToast({
         title: '已经没有视频了~',
         icon: "none"
@@ -76,7 +94,16 @@ Page({
       return;
     }
     var page = currentPage + 1;
-    me.getAllVideoList(page);
+    me.getAllVideoList(page, 0);
+  },
+  showVideoInfo: function(e) {
+    var me = this;
+    var videoList = me.data.videoList;
+    var errindex = e.target.dataset.arrindex;
+    var videoInfo = JSON.stringify(videoList[errindex]);
+    wx.navigateTo({
+      url: '../videoinfo/video?videoInfo=' + videoInfo,
+    })
   }
 
 })

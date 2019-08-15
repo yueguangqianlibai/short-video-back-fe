@@ -1,10 +1,14 @@
 {
   "pages": [
+    
     "pages/index/index",
+    "pages/videoinfo/video",
     "pages/userLogin/login",
-    "pages/chooseBgm/chooseBgm",  
+    "pages/report/report",
+    "pages/chooseBgm/chooseBgm",
     "pages/mine/mine",
-    "pages/userRegist/regist"
+    "pages/userRegist/regist",
+    "pages/searchVideo/searchVideo"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -13,7 +17,5 @@
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": true
   },
-  "debug": true,
   "sitemapLocation": "sitemap.json"
-  
 }
